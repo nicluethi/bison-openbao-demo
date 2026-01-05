@@ -1,0 +1,28 @@
+# Default policy definitions for OpenBao
+
+# Administrator policy - full access to all resources
+admin:
+  namespaces:
+    - ""        # Root namespace
+    - "k8s-mt"
+  policies:
+  - path: "*"
+    capabilities: [ "create", "read", "update", "delete", "list", "sudo" ]
+  - path: "sys/*"
+    capabilities: [ "create", "read", "update", "delete", "list", "sudo" ]
+  - path: "auth/token/create"
+    capabilities: [ "create", "update", "sudo" ]
+  - path: "k8s-mt/*"
+    capabilities: [ "create", "read", "update", "delete", "list", "sudo" ]
+
+# Base policy for authenticated users - minimal KV secrets access
+kv-base:
+  namespaces:
+    - "k8s-mt"
+  policies:
+  - path: "secrets/metadata"
+    capabilities: ["list"]
+  - path: "sys/mounts"
+    capabilities: ["read", "list"]
+  - path: "sys/mounts/secrets"
+    capabilities: ["read"]

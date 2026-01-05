@@ -1,0 +1,57 @@
+# OpenBao configuration - defines namespaces, identity groups, tenants, and approles
+
+# Vault namespaces with cluster identifiers
+namespaces:
+  k8s-mt:
+    - "gke-infra-prod"
+    - "gke-infra-non-prod"
+    - "gke-workload-prod"
+    - "gke-workload-non-prod"
+  namespace2:
+    - "use-case-1"
+    - "use-case-2"
+
+# Azure AD identity groups mapped to Vault
+identity_groups:
+  secops:
+    azure_group_id:  "4b2d49c0-734f-467d-8958-a4942b2cb4c1"
+    namespace:
+      - "k8s-mt"
+    policies:
+      - "kv-base"
+
+  app-dev:
+    azure_group_id: "f8cfafdf-de90-4c2a-a8ae-45935d6f3012"
+    namespace:
+      - "k8s-mt"
+    policies:
+      - "kv-base"
+
+# Tenant definitions with role-based access control
+tenants:
+  tenant-1:
+    cluster: # Clusters where tenant has access
+      - "gke-infra-non-prod"
+      - "gke-infra-prod"
+    owner: []
+    contributor: []
+    reader: 
+      - "secops"
+  tenant-2:
+    cluster:
+      - "gke-infra-non-prod"
+      - "gke-infra-prod"
+    owner:
+      - "app-dev"
+    contributor: []
+    reader: []
+
+# AppRole definitions for machine authentication
+approles:
+  cert-manager-bison-ch:
+    policies:
+      - "vault-issuer-bison-ch"
+  test:
+    policies:
+      - "test"
+  
