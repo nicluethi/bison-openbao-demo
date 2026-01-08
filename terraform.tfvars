@@ -1,6 +1,12 @@
-oidc_discovery_url = "https://login.microsoftonline.com/d8fa3136-6be3-4170-a817-dc0cecc9c358/v2.0"
-vault_addr = "localhost:8200"
-openbao_token="s.MGCgMzwqigUb4SgoQs4kTcJy"
+# General Config
+openbao_address = "localhost:8200"
+openbao_token = ""
+skip_tls_verify = true
+
+# OIDC
+oidc_discovery_url = ""
+oidc_client_id = ""
+oidc_client_secret = ""
 
 
 # Auto-Unseal

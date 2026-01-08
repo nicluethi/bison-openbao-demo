@@ -37,9 +37,9 @@ resource "vault_mount" "kv" {
   for_each              = local.namespaces
   path                  = var.mount_path
   type                  = "kv"
-  description           = var.description
+  description           = "KV Version 2 secrets engine"
   namespace             = vault_namespace.parent[each.key].path
-  max_lease_ttl_seconds = var.max_lease_ttl_seconds
+  max_lease_ttl_seconds = 0
 
   options = {
     version = "2"

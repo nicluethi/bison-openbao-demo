@@ -1,12 +1,3 @@
-# Azure AD OIDC authentication configuration for OpenBao/Vault
-# References:
-# - https://developer.hashicorp.com/vault/docs/auth/jwt/oidc-providers/azuread#connect-ad-group-with-vault-external-group
-# - https://developer.hashicorp.com/vault/tutorials/archive/oidc-auth-azure
-
-# bao server -dev -dev-root-token-id root
-# Testuser password: 81F?9q>Dg9\z username: test1@nicluethi1gmail.onmicrosoft.com
-# Testuser2 pw: 9vc^VPj7or7&2U5v username: tester2@nicluethi1gmail.onmicrosoft.com
-
 # Load merged configuration file
 locals {
   config = yamldecode(file(var.config_path))
@@ -15,7 +6,7 @@ locals {
 
 # Configure OIDC auth method in root namespace
 resource "vault_jwt_auth_backend" "oidc_root_ns" {
-  path               = var.mount_path
+  path               = "oidc"
   type               = "oidc"
   description        = "Azure Entra ID OIDC Authentication"
   oidc_discovery_url = var.discovery_url
@@ -24,14 +15,14 @@ resource "vault_jwt_auth_backend" "oidc_root_ns" {
   default_role       = var.default_role
 
   tune {
-    listing_visibility = var.listing_visibility
+    listing_visibility = "unauth"
   }
 }
 
 # Configure OIDC auth method per namespace
 resource "vault_jwt_auth_backend" "oidc" {
   for_each           = local.namespaces
-  path               = var.mount_path
+  path               = "oidc"
   type               = "oidc"
   description        = "Azure Entra ID OIDC Authentication"
   oidc_discovery_url = var.discovery_url
@@ -41,7 +32,7 @@ resource "vault_jwt_auth_backend" "oidc" {
   namespace          = each.key
 
   tune {
-    listing_visibility = var.listing_visibility
+    listing_visibility = "unauth"
   }
 }
 
@@ -58,8 +49,8 @@ resource "vault_jwt_auth_backend_role" "default" {
   allowed_redirect_uris = var.allowed_redirect_uris
   oidc_scopes           = var.oidc_scopes
 
-  token_ttl     = var.token_ttl
-  token_max_ttl = var.token_max_ttl
+  token_ttl     = 3600
+  token_max_ttl = 7200
 }
 
 # Map identity groups to tenant policies

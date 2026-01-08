@@ -14,14 +14,14 @@ namespaces:
 # Azure AD identity groups mapped to Vault
 identity_groups:
   secops:
-    azure_group_id:  "4b2d49c0-734f-467d-8958-a4942b2cb4c1"
+    azure_group_id:  ""
     namespace:
       - "k8s-mt"
     policies:
       - "kv-base"
 
   app-dev:
-    azure_group_id: "f8cfafdf-de90-4c2a-a8ae-45935d6f3012"
+    azure_group_id: ""
     namespace:
       - "k8s-mt"
     policies:
